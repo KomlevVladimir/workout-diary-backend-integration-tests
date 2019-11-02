@@ -1,0 +1,28 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.4.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.vladimirkomlev'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-amqp'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.6.0-M1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0-M1'
+	testImplementation "org.testcontainers:junit-jupiter:1.12.3"
+	testImplementation "org.junit.platform:junit-platform-launcher:1.6.0-M1"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:5.6.0-M1"
+	testImplementation "org.apache.httpcomponents:httpclient"
+	testImplementation "com.github.javafaker:javafaker:0.16"
+	runtimeOnly 'org.postgresql:postgresql'
+}
