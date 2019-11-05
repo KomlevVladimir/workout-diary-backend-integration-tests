@@ -12,6 +12,8 @@ public class ContainerProperties {
     private int backendPort;
     private String dbName;
     private int dbPort;
+    private String mailhogName;
+    private int mailhogPort;
     private Duration environmentStartupTimeout;
 
     public String getBackendName() {
@@ -40,6 +42,22 @@ public class ContainerProperties {
 
     public int getDbPort() {
         return dbPort;
+    }
+
+    public String getMailhogName() {
+        return mailhogName;
+    }
+
+    public void setMailhogName(String mailhogName) {
+        this.mailhogName = mailhogName;
+    }
+
+    public int getMailhogPort() {
+        return mailhogPort;
+    }
+
+    public void setMailhogPort(int mailhogPort) {
+        this.mailhogPort = mailhogPort;
     }
 
     public void setDbPort(int dbPort) {

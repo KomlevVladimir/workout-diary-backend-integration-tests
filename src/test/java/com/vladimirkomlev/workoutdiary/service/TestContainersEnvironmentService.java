@@ -35,6 +35,11 @@ public class TestContainersEnvironmentService implements EnvironmentService {
                         containerProperties.getDbPort(),
                         forListeningPort().withStartupTimeout(containerProperties.getEnvironmentStartupTimeout())
                 )
+                .withExposedService(
+                        containerProperties.getMailhogName(),
+                        containerProperties.getMailhogPort(),
+                        forListeningPort().withStartupTimeout(containerProperties.getEnvironmentStartupTimeout())
+                )
                 .withPull(true).withLocalCompose(true)
                 .start();
     }
@@ -69,5 +74,11 @@ public class TestContainersEnvironmentService implements EnvironmentService {
         return "jdbc:postgresql://" +
                 getContainerUrl(containerProperties.getDbName(), containerProperties.getDbPort()) +
                 "/postgres";
+    }
+
+    @Override
+    public String mailhogUrl() {
+        return "http://" +
+                getContainerUrl(containerProperties.getMailhogName(), containerProperties.getMailhogPort());
     }
 }

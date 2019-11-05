@@ -1,7 +1,9 @@
 package com.vladimirkomlev.workoutdiary.tests;
 
+import com.vladimirkomlev.workoutdiary.model.AllMessagesResponse;
 import com.vladimirkomlev.workoutdiary.model.UserCreateRequest;
 import com.vladimirkomlev.workoutdiary.model.UserResponse;
+import com.vladimirkomlev.workoutdiary.service.MailService;
 import com.vladimirkomlev.workoutdiary.service.RegistrationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +23,18 @@ public class RegistrationTests {
     @Autowired
     private RegistrationService registrationService;
 
+    @Autowired
+    private MailService mailService;
+
     @Test
     @DisplayName("Register user with valid data")
     public void registerUserWithValidDataTest() {
         UserCreateRequest request = randomUserCreateRequest();
+        AllMessagesResponse messagesBefore = mailService.getMessages(1000);
         UserResponse response = registrationService.signUp(request);
+        mailService.waitAndReceiveMessage();
+        AllMessagesResponse messagesAfter = mailService.getMessages(1000);
+
         assertAll(
                 () -> assertEquals(
                         request.getFirstName(),
@@ -51,7 +60,12 @@ public class RegistrationTests {
                         "The email in the request is " + request.getEmail() +
                                 " but in the response is " + response.getEmail()
                 ),
-                () -> assertTrue(response.getId() > 0, "User id is not generated")
+                () -> assertTrue(response.getId() > 0, "User id is not generated"),
+                () -> assertEquals(
+                        messagesBefore.getCount(),
+                        messagesAfter.getCount() - 1,
+                        "Email confirmation message is not received"
+                )
         );
     }
 
@@ -64,15 +78,15 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail(randomEmail())
                 .withPassword(randomPassword());
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
                         exception.getResponseBodyAsString().contains("firstName: should not be blank"),
                         exception.getResponseBodyAsString() + " does not contain 'firstName: should not be blank'"
-                        )
+                )
         );
     }
 
@@ -85,15 +99,15 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail(randomEmail())
                 .withPassword(randomPassword());
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
                         exception.getResponseBodyAsString().contains("lastName: should not be blank"),
                         exception.getResponseBodyAsString() + " does not contain 'lastName: should not be blank'"
-                        )
+                )
         );
     }
 
@@ -107,9 +121,9 @@ public class RegistrationTests {
                 .withEmail(randomEmail())
                 .withPassword(randomPassword());
 
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
@@ -128,9 +142,9 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail("")
                 .withPassword(randomPassword());
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
@@ -149,9 +163,9 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail("test")
                 .withPassword(randomPassword());
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
@@ -170,9 +184,9 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail(randomEmail())
                 .withPassword("");
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
@@ -192,9 +206,9 @@ public class RegistrationTests {
                 .withAge(randomAge())
                 .withEmail(randomEmail())
                 .withPassword(password);
-        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () -> {
-            registrationService.signUp(request);
-        });
+        HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
+                registrationService.signUp(request));
+
         assertAll(
                 () -> assertEquals(BAD_REQUEST, exception.getStatusCode(), "Status code is not " + BAD_REQUEST),
                 () -> assertTrue(
@@ -205,6 +219,4 @@ public class RegistrationTests {
                 )
         );
     }
-
-    // todo: Check receiving email with confirmation email
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class LocalProperties {
     private String backendUrl;
     private String dbUrl;
+    private String mailhogUrl;
 
     public String getBackendUrl() {
         return backendUrl;
@@ -25,5 +26,13 @@ public class LocalProperties {
 
     public void setDbUrl(String dbUrl) {
         this.dbUrl = dbUrl;
+    }
+
+    public String getMailhogUrl() {
+        return mailhogUrl;
+    }
+
+    public void setMailhogUrl(String mailHogUrl) {
+        this.mailhogUrl = mailHogUrl;
     }
 }

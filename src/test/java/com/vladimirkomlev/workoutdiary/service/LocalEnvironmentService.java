@@ -24,4 +24,9 @@ public class LocalEnvironmentService implements EnvironmentService {
     public String dbUrl() {
         return localProperties.getDbUrl();
     }
+
+    @Override
+    public String mailhogUrl() {
+        return localProperties.getMailhogUrl();
+    }
 }
