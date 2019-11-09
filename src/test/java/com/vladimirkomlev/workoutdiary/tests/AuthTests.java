@@ -39,7 +39,7 @@ public class AuthTests {
     public void registerUser() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         registrationService.signUp(userCreateRequest);
-        String secret = mailService.getConfirmationSecretFromMessage();
+        String secret = mailService.getConfirmationSecretFromEmailConfirmationMessage();
         ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
         emailConfirmationService.confirm(confirmationRequest);
         email = userCreateRequest.getEmail();

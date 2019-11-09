@@ -35,7 +35,7 @@ public class EmailConfirmationTests {
     public void confirmEmailWithValidSecretTest() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         UserResponse registrationResponse = registrationService.signUp(userCreateRequest);
-        String secret = mailService.getConfirmationSecretFromMessage();
+        String secret = mailService.getConfirmationSecretFromEmailConfirmationMessage();
         ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
         UserResponse confirmationResponse = emailConfirmationService.confirm(confirmationRequest);
 
