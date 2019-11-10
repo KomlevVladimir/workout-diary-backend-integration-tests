@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @SpringBootTest
-public class AuthTests {
+public class LoginTests {
     private String email;
     private String password;
 

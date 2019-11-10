@@ -1,7 +1,7 @@
 package com.vladimirkomlev.workoutdiary.model;
 
 public class AuthResponse {
-    private Long userId;
+    private long userId;
     private String token;
 
     @Override
@@ -12,7 +12,7 @@ public class AuthResponse {
                 '}';
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
