@@ -1,14 +1,14 @@
 package com.vladimirkomlev.workoutdiary.model;
 
 public class ConfirmationRequest {
-    private String secret;
+    private String code;
 
-    public String getSecret() {
-        return secret;
+    public String getCode() {
+        return code;
     }
 
-    public ConfirmationRequest withSecret(String secret) {
-        this.secret = secret;
+    public ConfirmationRequest withCode(String code) {
+        this.code = code;
         return this;
     }
 }

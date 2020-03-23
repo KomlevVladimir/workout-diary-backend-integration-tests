@@ -39,8 +39,8 @@ public class LoginTests {
     public void registerUser() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         registrationService.signUp(userCreateRequest);
-        String secret = mailService.getConfirmationSecretFromEmailConfirmationMessage();
-        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
+        String code = mailService.getConfirmationCodeFromEmailConfirmationMessage();
+        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withCode(code);
         emailConfirmationService.confirm(confirmationRequest);
         email = userCreateRequest.getEmail();
         password = userCreateRequest.getPassword();

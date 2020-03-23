@@ -1,15 +1,15 @@
 package com.vladimirkomlev.workoutdiary.model;
 
 public class SetupPasswordRequest {
-    private String secret;
+    private String code;
     private String password;
 
-    public String getSecret() {
-        return secret;
+    public String getCode() {
+        return code;
     }
 
-    public SetupPasswordRequest withSecret(String secret) {
-        this.secret = secret;
+    public SetupPasswordRequest withCode(String code) {
+        this.code = code;
         return this;
     }
 

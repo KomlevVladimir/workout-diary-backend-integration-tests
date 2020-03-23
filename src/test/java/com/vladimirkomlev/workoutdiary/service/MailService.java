@@ -53,13 +53,13 @@ public class MailService {
         throw new IllegalArgumentException("Item is not received");
     }
 
-    public String getConfirmationSecretFromEmailConfirmationMessage() {
+    public String getConfirmationCodeFromEmailConfirmationMessage() {
         Item message = waitAndReceiveMessage();
-        return message.getBody().replace("Your confirmation secret is: ", "");
+        return message.getBody().replace("Your confirmation code is: ", "");
     }
 
-    public String getSecretFromResetPasswordConfirmationMessage() {
+    public String getCodeFromResetPasswordConfirmationMessage() {
         Item message = waitAndReceiveMessage();
-        return message.getBody().replace("Your reset password secret is: ", "");
+        return message.getBody().replace("Your reset password code is: ", "");
     }
 }

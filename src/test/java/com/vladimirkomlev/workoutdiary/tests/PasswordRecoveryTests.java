@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.Random;
+
 import static com.vladimirkomlev.workoutdiary.generator.DataGenerator.randomEmail;
 import static com.vladimirkomlev.workoutdiary.generator.DataGenerator.randomPassword;
 import static com.vladimirkomlev.workoutdiary.generator.DataGenerator.randomUserCreateRequest;
@@ -44,8 +46,8 @@ public class PasswordRecoveryTests {
     public void registerUser() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         registrationService.signUp(userCreateRequest);
-        String secret = mailService.getConfirmationSecretFromEmailConfirmationMessage();
-        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
+        String code = mailService.getConfirmationCodeFromEmailConfirmationMessage();
+        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withCode(code);
         emailConfirmationService.confirm(confirmationRequest);
         email = userCreateRequest.getEmail();
         password = userCreateRequest.getPassword();
@@ -84,9 +86,9 @@ public class PasswordRecoveryTests {
         ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest().withEmail(email);
         passwordService.resetPassword(resetPasswordRequest);
 
-        String secret = mailService.getSecretFromResetPasswordConfirmationMessage();
+        String code = mailService.getCodeFromResetPasswordConfirmationMessage();
         String newPassword = randomPassword();
-        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withSecret(secret);
+        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withCode(code);
         passwordService.setupPassword(setupPasswordRequest);
 
         AuthRequest oldAuthRequest = new AuthRequest().withEmail(email).withPassword(password);
@@ -103,14 +105,16 @@ public class PasswordRecoveryTests {
     }
 
     @Test
-    @DisplayName("Setup password with invalid secret")
-    public void setupPasswordWithInvalidSecretTest() {
+    @DisplayName("Setup password with invalid code")
+    public void setupPasswordWithInvalidCodeTest() {
         ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest().withEmail(email);
         passwordService.resetPassword(resetPasswordRequest);
 
-        String invalidSecret = randomUUID().toString();
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        String invalidCode = String.format("%06d", number);
         String newPassword = randomPassword();
-        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withSecret(invalidSecret);
+        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withCode(invalidCode);
         HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
                 passwordService.setupPassword(setupPasswordRequest));
 
@@ -119,13 +123,13 @@ public class PasswordRecoveryTests {
     }
 
     @Test
-    @DisplayName("Setup password with empty secret")
-    public void setupPasswordWithEmptySecretTest() {
+    @DisplayName("Setup password with empty code")
+    public void setupPasswordWithEmptyCodeTest() {
         ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest().withEmail(email);
         passwordService.resetPassword(resetPasswordRequest);
 
         String newPassword = randomPassword();
-        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withSecret("");
+        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(newPassword).withCode("");
         HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
                 passwordService.setupPassword(setupPasswordRequest));
 
@@ -139,8 +143,8 @@ public class PasswordRecoveryTests {
         ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest().withEmail(email);
         passwordService.resetPassword(resetPasswordRequest);
 
-        String secret = mailService.getSecretFromResetPasswordConfirmationMessage();
-        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(password).withSecret(secret);
+        String code = mailService.getCodeFromResetPasswordConfirmationMessage();
+        SetupPasswordRequest setupPasswordRequest = new SetupPasswordRequest().withPassword(password).withCode(code);
         HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
                 passwordService.setupPassword(setupPasswordRequest));
 

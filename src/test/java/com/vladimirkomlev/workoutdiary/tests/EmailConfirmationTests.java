@@ -31,24 +31,24 @@ public class EmailConfirmationTests {
     private EmailConfirmationService emailConfirmationService;
 
     @Test
-    @DisplayName("Confirm email with valid secret")
-    public void confirmEmailWithValidSecretTest() {
+    @DisplayName("Confirm email with valid code")
+    public void confirmEmailWithValidCodeTest() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         UserResponse registrationResponse = registrationService.signUp(userCreateRequest);
-        String secret = mailService.getConfirmationSecretFromEmailConfirmationMessage();
-        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
+        String code = mailService.getConfirmationCodeFromEmailConfirmationMessage();
+        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withCode(code);
         UserResponse confirmationResponse = emailConfirmationService.confirm(confirmationRequest);
 
         assertEquals(registrationResponse, confirmationResponse, "Email is not confirmed");
     }
 
     @Test
-    @DisplayName("Confirm email with invalid secret")
-    public void confirmEmailWithInvalidSecretTest() {
+    @DisplayName("Confirm email with invalid code")
+    public void confirmEmailWithInvalidCodeTest() {
         UserCreateRequest userCreateRequest = randomUserCreateRequest();
         UserResponse registrationResponse = registrationService.signUp(userCreateRequest);
-        String secret = randomUUID().toString();
-        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withSecret(secret);
+        String code = randomUUID().toString();
+        ConfirmationRequest confirmationRequest = new ConfirmationRequest().withCode(code);
         HttpClientErrorException exception = assertThrows(HttpClientErrorException.class, () ->
                 emailConfirmationService.confirm(confirmationRequest));
 
