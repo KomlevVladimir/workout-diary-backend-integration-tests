@@ -18,7 +18,7 @@ services:
     - 1025:1025
     - 8025:8025
   backend:
-    image: "docker.io/library/workout-diary-backend"
+    image: "docker.io/komlevvladimir/workout-diary-backend"
     ports:
     - 8080:8080
     depends_on:
