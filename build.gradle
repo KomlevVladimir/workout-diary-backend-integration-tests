@@ -34,7 +34,7 @@ dependencies {
 	testImplementation 'org.junit.platform:junit-platform-runner'
 	testImplementation "org.apache.httpcomponents:httpclient"
 	testImplementation 'com.github.javafaker:javafaker:0.16'
-	testImplementation 'org.testcontainers:testcontainers:1.10.3'
+	testImplementation 'org.testcontainers:testcontainers:1.15.2'
 
 	runtimeOnly 'org.postgresql:postgresql'
 }
