@@ -16,7 +16,6 @@ allure {
 }
 
 group = 'com.vladimirkomlev'
-sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -45,6 +44,7 @@ dependencies {
 	testImplementation "org.apache.httpcomponents:httpclient"
 	testImplementation 'com.github.javafaker:javafaker:0.16'
 	testImplementation 'org.testcontainers:testcontainers:1.15.2'
+	testRuntimeOnly 'io.qameta.allure:allure-junit5:2.8.1'
 
 	runtimeOnly 'org.postgresql:postgresql'
 }
