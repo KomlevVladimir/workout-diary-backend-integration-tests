@@ -22,11 +22,6 @@ pipeline {
                     dir("workout-diary-backend-integration-tests") {
                         git url: "https://$gitRepo", branch: 'master', credentialsId: githubCredentialsId
 
-                        def commitHash = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-                        version = "${getDateTime()}-$commitHash"
-
-                        sh 'chmod +x gradlew && ./gradlew clean build --no-daemon'
-
                         withCredentials([usernamePassword(credentialsId: githubCredentialsId,
                                 passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
                             sh("docker login $registryName -u '$GITHUB_USERNAME' -p '$GITHUB_PASSWORD'")
