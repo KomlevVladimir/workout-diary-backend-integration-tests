@@ -1,9 +1,19 @@
 plugins {
 	id 'org.springframework.boot' version '2.2.0.RELEASE'
+	id 'io.qameta.allure' version '2.5'
 	id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
+
+allure {
+	autoconfigure = true
+	version = '2.7.0'
+
+	useJUnit5 {
+		version = '2.7.0'
+	}
+}
 
 group = 'com.vladimirkomlev'
 sourceCompatibility = '11'
